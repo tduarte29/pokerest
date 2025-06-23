@@ -1,4 +1,4 @@
-package ifsp.bra.poke.poke;
+package ifsp.bra.rest.poke;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

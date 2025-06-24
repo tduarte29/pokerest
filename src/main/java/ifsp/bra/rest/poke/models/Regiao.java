@@ -1,10 +1,14 @@
 package ifsp.bra.rest.poke.models;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,8 +28,8 @@ public class Regiao {
     @Column(name = "geracao_introduzida", nullable = false)
     private Integer geracaoIntroduzida;
 
-    // @OneToMany(mappedBy = "regiao", cascade = CascadeType.ALL)
-    // private List<Treinador> treinadores;
+     @OneToMany(mappedBy = "regiao", cascade = CascadeType.ALL)
+     private List<Treinador> treinadores;
 
     public Regiao() {}
 
@@ -68,11 +72,11 @@ public class Regiao {
         this.geracaoIntroduzida = geracaoIntroduzida;
     }
 
-//     public List<Treinador> getTreinadores() {
-//         return treinadores;
-//     }
+     public List<Treinador> getTreinadores() {
+         return treinadores;
+     }
 
-//     public void setTreinadores(List<Treinador> treinadores) {
-//         this.treinadores = treinadores;
-//     }
+     public void setTreinadores(List<Treinador> treinadores) {
+        this.treinadores = treinadores;
+     }
 }

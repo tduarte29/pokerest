@@ -1,12 +1,14 @@
 package ifsp.bra.rest.poke.service;
 
-import ifsp.bra.rest.poke.models.Pokemon;
-import ifsp.bra.rest.poke.repositories.PokemonRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import ifsp.bra.rest.poke.models.Pokemon;
+import ifsp.bra.rest.poke.models.Treinador;
+import ifsp.bra.rest.poke.repositories.PokemonRepository;
 
 @Service
 public class PokemonService {
@@ -28,9 +30,10 @@ public class PokemonService {
     }
 
     public Pokemon save(Pokemon pokemon) {
-        // Ensure the trainer exists
-        treinadorService.findById(pokemon.getTreinador().getId())
-                .orElseThrow(() -> new RuntimeException("Treinador não encontrado"));
+        // Ensure the trainer exists and set the full object
+        Treinador treinador = treinadorService.findById(pokemon.getTreinador().getId())
+            .orElseThrow(() -> new RuntimeException("Treinador não encontrado"));
+        pokemon.setTreinador(treinador);
         return pokemonRepository.save(pokemon);
     }
 

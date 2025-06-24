@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ifsp.bra.rest.poke.dto.TreinadorDTO;
 import ifsp.bra.rest.poke.models.Treinador;
 import ifsp.bra.rest.poke.service.TreinadorService;
 
@@ -28,23 +29,26 @@ public class TreinadorController {
     }
 
     @GetMapping
-    public List<Treinador> getAllTreinadores() {
-        return treinadorService.findAll();
+    public List<TreinadorDTO> getAllTreinadores() {
+        return treinadorService.findAll().stream()
+            .map(TreinadorDTO::toDTO)
+            .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Treinador> getTreinadorById(@PathVariable Long id) {
+    public ResponseEntity<TreinadorDTO> getTreinadorById(@PathVariable Long id) {
         Optional<Treinador> treinador = treinadorService.findById(id);
-        return treinador.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return treinador.map(t -> ResponseEntity.ok(TreinadorDTO.toDTO(t)))
+                        .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Treinador createTreinador(@RequestBody Treinador treinador) {
-        return treinadorService.save(treinador);
+    public TreinadorDTO createTreinador(@RequestBody Treinador treinador) {
+        return TreinadorDTO.toDTO(treinadorService.save(treinador));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Treinador> updateTreinador(@PathVariable Long id, @RequestBody Treinador treinadorDetails) {
+    public ResponseEntity<TreinadorDTO> updateTreinador(@PathVariable Long id, @RequestBody Treinador treinadorDetails) {
         Optional<Treinador> treinadorOptional = treinadorService.findById(id);
         if (!treinadorOptional.isPresent()) {
             return ResponseEntity.notFound().build();
@@ -54,7 +58,7 @@ public class TreinadorController {
         treinador.setIdade(treinadorDetails.getIdade());
         treinador.setRegiao(treinadorDetails.getRegiao());
         Treinador updatedTreinador = treinadorService.save(treinador);
-        return ResponseEntity.ok(updatedTreinador);
+        return ResponseEntity.ok(TreinadorDTO.toDTO(updatedTreinador));
     }
 
     @DeleteMapping("/{id}")
@@ -62,14 +66,4 @@ public class TreinadorController {
         treinadorService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
-    // @GetMapping("/regiao/{regiaoId}")
-    // public List<Treinador> getTreinadoresByRegiao(@PathVariable Long regiaoId) {
-    //     return treinadorService.findByRegiaoId(regiaoId);
-    // }
-
-    // @GetMapping("/buscar")
-    // public List<Treinador> searchTreinadores(@RequestParam String nome) {
-    //     return treinadorService.findByNomeContaining(nome);
-    // }
 }

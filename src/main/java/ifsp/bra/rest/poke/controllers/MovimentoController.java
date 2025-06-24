@@ -1,13 +1,22 @@
 package ifsp.bra.rest.poke.controllers;
 
-import ifsp.bra.rest.poke.models.Movimento;
-import ifsp.bra.rest.poke.service.MovimentoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import ifsp.bra.rest.poke.dto.MovimentoDTO;
+import ifsp.bra.rest.poke.models.Movimento;
+import ifsp.bra.rest.poke.service.MovimentoService;
 
 @RestController
 @RequestMapping("/api/movimentos")
@@ -20,23 +29,26 @@ public class MovimentoController {
     }
 
     @GetMapping
-    public List<Movimento> getAllMovimentos() {
-        return movimentoService.findAll();
+    public List<MovimentoDTO> getAllMovimentos() {
+        return movimentoService.findAll().stream()
+            .map(MovimentoDTO::toDTO)
+            .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movimento> getMovimentoById(@PathVariable Long id) {
+    public ResponseEntity<MovimentoDTO> getMovimentoById(@PathVariable Long id) {
         Optional<Movimento> movimento = movimentoService.findById(id);
-        return movimento.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return movimento.map(m -> ResponseEntity.ok(MovimentoDTO.toDTO(m)))
+                        .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Movimento createMovimento(@RequestBody Movimento movimento) {
-        return movimentoService.save(movimento);
+    public MovimentoDTO createMovimento(@RequestBody Movimento movimento) {
+        return MovimentoDTO.toDTO(movimentoService.save(movimento));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Movimento> updateMovimento(@PathVariable Long id, @RequestBody Movimento movimentoDetails) {
+    public ResponseEntity<MovimentoDTO> updateMovimento(@PathVariable Long id, @RequestBody Movimento movimentoDetails) {
         Optional<Movimento> movimentoOptional = movimentoService.findById(id);
         if (!movimentoOptional.isPresent()) {
             return ResponseEntity.notFound().build();
@@ -49,7 +61,7 @@ public class MovimentoController {
         movimento.setPrecisao(movimentoDetails.getPrecisao());
         movimento.setPpMax(movimentoDetails.getPpMax());
         Movimento updatedMovimento = movimentoService.save(movimento);
-        return ResponseEntity.ok(updatedMovimento);
+        return ResponseEntity.ok(MovimentoDTO.toDTO(updatedMovimento));
     }
 
     @DeleteMapping("/{id}")
@@ -59,21 +71,25 @@ public class MovimentoController {
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<Movimento> getMovimentoByNome(@PathVariable String nome) {
+    public ResponseEntity<MovimentoDTO> getMovimentoByNome(@PathVariable String nome) {
         Movimento movimento = movimentoService.findByNome(nome);
         if (movimento == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(movimento);
+        return ResponseEntity.ok(MovimentoDTO.toDTO(movimento));
     }
 
     @GetMapping("/tipo/{tipo}")
-    public List<Movimento> getMovimentosByTipo(@PathVariable String tipo) {
-        return movimentoService.findByTipo(tipo);
+    public List<MovimentoDTO> getMovimentosByTipo(@PathVariable String tipo) {
+        return movimentoService.findByTipo(tipo).stream()
+            .map(MovimentoDTO::toDTO)
+            .toList();
     }
 
     @GetMapping("/categoria/{categoria}")
-    public List<Movimento> getMovimentosByCategoria(@PathVariable String categoria) {
-        return movimentoService.findByCategoria(categoria);
+    public List<MovimentoDTO> getMovimentosByCategoria(@PathVariable String categoria) {
+        return movimentoService.findByCategoria(categoria).stream()
+            .map(MovimentoDTO::toDTO)
+            .toList();
     }
 }

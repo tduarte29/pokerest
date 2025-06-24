@@ -1,12 +1,13 @@
 package ifsp.bra.rest.poke.service;
 
-import ifsp.bra.rest.poke.models.Treinador;
-import ifsp.bra.rest.poke.repositories.TreinadorRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import ifsp.bra.rest.poke.models.Treinador;
+import ifsp.bra.rest.poke.repositories.TreinadorRepository;
 
 @Service
 public class TreinadorService {
@@ -38,11 +39,11 @@ public class TreinadorService {
         treinadorRepository.deleteById(id);
     }
 
-    public List<Treinador> findByRegiaoId(Long regiaoId) {
-        return treinadorRepository.findByRegiaoId(regiaoId);
-    }
+    // public List<Treinador> findByRegiaoId(Long regiaoId) {
+    //     return treinadorRepository.findByRegiaoId(regiaoId);
+    // }
 
-    public List<Treinador> findByNomeContaining(String nome) {
-        return treinadorRepository.findByNomeContaining(nome);
-    }
+    // public List<Treinador> findByNomeContaining(String nome) {
+    //     return treinadorRepository.findByNomeContaining(nome);
+    // }
 }

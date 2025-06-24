@@ -100,7 +100,7 @@ public class PokemonController {
     }
 
     @PutMapping("/{pokemonId}/movimentos/{movimentoId}")
-    public ResponseEntity<Pokemon> addMovimentoToPokemon(@PathVariable Long pokemonId, @PathVariable Long movimentoId) {
+    public ResponseEntity<PokemonDTO> addMovimentoToPokemon(@PathVariable Long pokemonId, @PathVariable Long movimentoId) {
         Optional<Pokemon> pokemonOpt = pokemonService.findById(pokemonId);
         Optional<Movimento> movimentoOpt = movimentoService.findById(movimentoId);
 
@@ -114,6 +114,7 @@ public class PokemonController {
         pokemon.addMovimento(movimento);
         Pokemon updatedPokemon = pokemonService.save(pokemon);
 
-        return ResponseEntity.ok(updatedPokemon);
+        // Retorne o DTO para evitar loop
+        return ResponseEntity.ok(PokemonDTO.toDTO(updatedPokemon));
     }
 }

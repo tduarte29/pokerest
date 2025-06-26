@@ -40,7 +40,6 @@ public class Movimento {
     @ManyToMany(mappedBy = "movimentos")
     private Set<Pokemon> pokemons = new HashSet<>();
 
-    // Constructors, getters, and setters
     public Movimento() {}
 
     public Movimento(String nome, String tipo, String categoria, Integer poder, Integer precisao, Integer ppMax) {

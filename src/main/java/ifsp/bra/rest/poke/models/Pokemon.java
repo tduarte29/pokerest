@@ -1,8 +1,18 @@
 package ifsp.bra.rest.poke.models;
 
-import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Pokemon")
@@ -33,7 +43,6 @@ public class Pokemon {
     )
     private Set<Movimento> movimentos = new HashSet<>();
 
-    // Constructors, getters, and setters
     public Pokemon() {}
 
     public Pokemon(String nome, Integer numPokedex, String descricao, Treinador treinador) {

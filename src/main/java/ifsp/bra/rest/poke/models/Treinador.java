@@ -33,7 +33,6 @@ public class Treinador {
     @OneToMany(mappedBy = "treinador")
     private List<Pokemon> pokemons;
 
-     // Constructors, getters, and setters
     public Treinador() {}
 
     public Treinador(String nome, Integer idade, Regiao regiao) {
@@ -42,7 +41,6 @@ public class Treinador {
         this.regiao = regiao;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
